@@ -3,4 +3,4 @@ An abstraction of OpenTK. The idea is to make it relatively easy to generate mes
 # WIP
 this is a work in progress
 
-OpenTK not included
+OpenTK not included, if you want to use this you need to download opentk seperately
