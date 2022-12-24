@@ -9,11 +9,11 @@ public class Game: GameWindow{
 	Shader shader;
 	Texture texture;
 	float[] verteces = {
-		// position				color
+		// position			color
 		-0.5f, -0.5f, 0.0f,		1, 0, 0,	// bottom left
 		 0.5f, -0.5f, 0.0f,		0, 1, 0,	// bottom right
 		-0.5f,  0.5f, 0.0f,		0, 0, 1,	// top left
-		 0.5f,  0.5f, 0.0f,		0, 1, 1	// top right
+		 0.5f,  0.5f, 0.0f,		0, 1, 1, 	// top right
 	};
 
 	uint[] indices = {
