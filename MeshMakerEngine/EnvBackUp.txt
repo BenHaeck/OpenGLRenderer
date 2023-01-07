@@ -1,0 +1,76 @@
+public HeightPlane (float[,] heights, float gridWidth, float defaultHeight = 0, float minShade = 1, int numberOfTextures = 1) {
+		mm = new MeshMaker(heights.Length * 4 * 4, heights.Length * 6 * 4);
+		this.heights = heights;
+		this.defaultHeight = defaultHeight;
+		
+		mm.useindices = true;
+
+		for (int z = -1; z < heights.GetLength(0); z++) {
+			for (int x = -1; x < heights.GetLength(1); x++){
+				//Console.WriteLine($"{x}, {z}");
+				float smaller = MathF.Min(GetHeight(x,z), GetHeight(x + 1, z));
+				float larger = MathF.Max(GetHeight(x,z), GetHeight(x + 1, z));
+
+				float dir = 0;
+				if (smaller != larger){
+					dir = GetHeight(x,z) > GetHeight(x + 1,z)? 1: -1;
+
+					int ind = 
+					mm.PushVertex(x+1, larger, z+1,  1, 1, 1,  1, -larger,  dir, 0, 0);
+					mm.PushVertex(x+1, larger, z+0,  1, 1, 1,  0, -larger,  dir, 0, 0);
+
+					mm.PushVertex(x+1, smaller, z+1,  minShade, minShade, minShade,  1, -smaller,  dir, 0, 0);
+					mm.PushVertex(x+1, smaller, z+0,  minShade, minShade, minShade,  0, -smaller,  dir, 0, 0);
+
+					mm.PushIndex((uint)(ind+0));
+					mm.PushIndex((uint)(ind+1));
+					mm.PushIndex((uint)(ind+2));
+
+					mm.PushIndex((uint)(ind+1));
+					mm.PushIndex((uint)(ind+2));
+					mm.PushIndex((uint)(ind+3));
+				}
+				smaller = MathF.Min(GetHeight(x,z), GetHeight(x, z + 1));
+				larger = MathF.Max(GetHeight(x,z), GetHeight(x, z + 1));
+				if (smaller != larger) {
+					dir = GetHeight(x,z) > GetHeight(x,z + 1)? 1: -1;
+					
+					int ind = 
+					mm.PushVertex(x+1, larger, z+1,  1, 1, 1,  1, -larger,  0, 0, dir);
+					mm.PushVertex(x+0, larger, z+1,  1, 1, 1,  0, -larger,  0, 0, dir);
+
+					mm.PushVertex(x+1, smaller, z+1,  minShade, minShade, minShade,  1, -smaller,  0, 0, dir);
+					mm.PushVertex(x+0, smaller, z+1,  minShade, minShade, minShade,  0, -smaller,  0, 0, dir);
+
+					mm.PushIndex((uint)(ind+0));
+					mm.PushIndex((uint)(ind+1));
+					mm.PushIndex((uint)(ind+2));
+
+					mm.PushIndex((uint)(ind+1));
+					mm.PushIndex((uint)(ind+2));
+					mm.PushIndex((uint)(ind+3));
+				}
+				//Console.Write(ind + " ");
+			}
+		}
+
+		for (int i = 0; i < heights.Length; i++) {
+			int z = i % heights.GetLength(0), x = i / heights.GetLength(0);
+			//Console.WriteLine($"{x}, {z}");
+			int ind = 
+			mm.PushVertex(x  , heights[z,x], z  ,  1, 1, 1,  0, 0,  0, 1, 0);
+			mm.PushVertex(x+1, heights[z,x], z  ,  1, 1, 1,  1, 0,  0, 1, 0);
+			mm.PushVertex(x  , heights[z,x], z+1,  1, 1, 1,  0, 1,  0, 1, 0);
+			mm.PushVertex(x+1, heights[z,x], z+1,  1, 1, 1,  1, 1,  0, 1, 0);
+
+			mm.PushIndex((uint)(ind+0));
+			mm.PushIndex((uint)(ind+1));
+			mm.PushIndex((uint)(ind+2));
+
+			mm.PushIndex((uint)(ind+1));
+			mm.PushIndex((uint)(ind+2));
+			mm.PushIndex((uint)(ind+3));
+
+			//Console.Write(ind + " ");
+		}
+	}
